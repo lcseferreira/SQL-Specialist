@@ -37,3 +37,20 @@ UPDATE dp_avg_temp dp
           FROM employees e
          WHERE dp.department_id = e.department_id
          GROUP BY e.department_id);
+
+ WITH salaries AS
+  (SELECT e.department_id,
+          MAX(e.salary) max_salary,
+          MIN(e.salary) min_salary,
+          ROUND(AVG(e.salary), 2) avg_salary
+     FROM employees e
+    GROUP BY department_id)
+ SELECT e.employee_id,
+        e.first_name,
+        e.salary,
+        e.department_id,
+        s.max_salary,
+        s.min_salary,
+        s.avg_salary
+   FROM employees e, salaries s
+  WHERE e.department_id = s.department_id;
